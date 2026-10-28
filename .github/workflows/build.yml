@@ -14,10 +14,9 @@ jobs:
           gradle-version: 8.9
       - run: unzip -q ExpiryTracker.zip
       - run: |
-          mkdir -p ~/.gradle
-          printf "android.useAndroidX=true\norg.gradle.jvmargs=-Xmx3g\n" >> ~/.gradle/gradle.properties
-          printf "android.useAndroidX=true\n" > ExpiryTracker/gradle.properties
-      - run: cd ExpiryTracker && gradle assembleDebug -Pandroid.useAndroidX=true
+          sed -i 's/^package io.expiry.tracker$/package io.expiry.tracker\nimport androidx.compose.foundation.isSystemInDarkTheme/' ExpiryTracker/app/src/main/java/io/expiry/tracker/MainActivity.kt
+          printf "android.useAndroidX=true\norg.gradle.jvmargs=-Xmx3g\n" > ExpiryTracker/gradle.properties
+      - run: cd ExpiryTracker && gradle assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: app
