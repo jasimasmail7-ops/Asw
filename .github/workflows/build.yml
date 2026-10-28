@@ -13,7 +13,11 @@ jobs:
         with:
           gradle-version: 8.9
       - run: unzip -q ExpiryTracker.zip
-      - run: cd ExpiryTracker && gradle assembleDebug
+      - run: |
+          mkdir -p ~/.gradle
+          printf "android.useAndroidX=true\norg.gradle.jvmargs=-Xmx3g\n" >> ~/.gradle/gradle.properties
+          printf "android.useAndroidX=true\n" > ExpiryTracker/gradle.properties
+      - run: cd ExpiryTracker && gradle assembleDebug -Pandroid.useAndroidX=true
       - uses: actions/upload-artifact@v4
         with:
           name: app
